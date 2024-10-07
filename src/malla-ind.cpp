@@ -402,10 +402,52 @@ Tetraedro::Tetraedro()
 }
 
 EstrellaZ::EstrellaZ(uint n)
-:  MallaInd("estrella Z")
+:  MallaInd("estrella Z de N puntas")
 {
-   vertices.push_back({0.5, 0.5, 0.0});
+   float radio_grande = 0.5;
+   float radio_pequenio = radio_grande/2;
+   glm::vec3 centro = {0.5, 0.5, 0.0};
+   vertices.push_back(centro);
    col_ver.push_back({1.0, 1.0, 1.0});
+
+   float angulo = 360.0/n;
+
+   for(uint i=0; i<n; i++)
+   {
+      float x_grande = centro[0] + radio_grande*cos(glm::radians(angulo*i));
+      float y_grande = centro[1] + radio_grande*sin(glm::radians(angulo*i));
+
+      vertices.push_back({x_grande, y_grande, 0.0});
+      col_ver.push_back({x_grande, y_grande, 0.0});
+
+      float x_pequenio = centro[0] + radio_pequenio*cos(glm::radians(angulo*i + angulo/2));
+      float y_pequenio = centro[1] + radio_pequenio*sin(glm::radians(angulo*i + angulo/2));
+
+      vertices.push_back({x_pequenio, y_pequenio, 0.0});
+      col_ver.push_back({x_pequenio, y_pequenio, 0.0});
+   }
+
+   uint aux1 = 1;
+   uint aux2 = 2;
+
+   for(uint i=0; i<2*n; i++)
+   {
+      triangulos.push_back({0, aux1, aux2});
+
+      if(i%2 == 0)
+      {
+         aux1 += 2;
+      }
+      else
+      {
+         aux2 += 2;
+      }
+
+      if(aux1>=2*n)
+      {
+         aux1 = 1;
+      }
+   }
 }
 
 // -----------------------------------------------------------------------------------------------
