@@ -156,7 +156,7 @@ void DescrVBOAtribs::comprobar() const
 void DescrVBOAtribs::crearVBO() 
 {
    // comprobar precondiciones
-   CError();------------------------------------------------------------------------------------------------------
+   CError();
    assert( buffer == 0 );  
    comprobar();
 

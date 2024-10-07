@@ -109,7 +109,11 @@ void MallaInd::visualizarGL( )
    // Si el objeto tiene un color asignado (se comprueba con 'tieneColor')
    //    - hacer push del color actual del cauce
    //    - fijar el color en el cauce usando el color del objeto (se lee con 'leerColor()')
-
+   if(tieneColor())
+   {
+      cauce->pushColor();
+      cauce->fijarColor(leerColor());
+   }
 
    // COMPLETAR: práctica 1: crear el descriptor de VAO, si no está creado
    //  Si el puntero 'dvao' es nulo, crear el descriptor de VAO
@@ -121,15 +125,43 @@ void MallaInd::visualizarGL( )
    //  Si el VAO ya está creado, (dvao no nulo), no hay que hacer nada.
    //
 
+   if(dvao == nullptr)
+   {
+      DescrVBOAtribs *pos_dvbo = new DescrVBOAtribs(ind_atrib_posiciones, vertices);
+      dvao = new DescrVAO(numero_atributos_cauce, pos_dvbo);
+
+      DescrVBOInds *ind_dvbo = new DescrVBOInds(triangulos);
+      dvao->agregar(ind_dvbo);
+
+      if(col_ver.size() != 0)
+      {
+         DescrVBOAtribs *col_dvbo = new DescrVBOAtribs(ind_atrib_colores, col_ver);
+         dvao->agregar(col_dvbo);
+      }
+      if(nor_ver.size() != 0)
+      {
+         DescrVBOAtribs *nor_dvbo = new DescrVBOAtribs(ind_atrib_normales, nor_ver);
+         dvao->agregar(nor_dvbo);
+      }
+      if(cc_tt_ver.size() != 0)
+      {
+         DescrVBOAtribs *cc_tt_dvbo = new DescrVBOAtribs(ind_atrib_coord_text, cc_tt_ver);
+         dvao->agregar(cc_tt_dvbo);
+      }
+   }
+
 
    // COMPLETAR: práctica 1: visualizar el VAO usando el método 'draw' de 'DescrVAO'
-
+   dvao->draw(GL_TRIANGLES);
 
    // COMPLETAR: práctica 1: restaurar color anterior del cauce 
    //
    // Si el objeto tiene un color asignado (se comprueba con 'tieneColor')
    //    - hacer 'pop' del color actual del cauce
-
+   if(tieneColor())
+   {
+      cauce->popColor();
+   }
 }
 
 
@@ -151,7 +183,41 @@ void MallaInd::visualizarGeomGL( )
    //    2. Dibujar la malla (únicamente visualizará los triángulos), se usa el método 'draw' del VAO (dvao)
    //    3. Volver a activar todos los atributos para los cuales la tabla no esté vacía
    // ....
+   if(!col_ver.empty())
+   {
+      dvao->habilitarAtrib(ind_atrib_colores, false);
+   }
+   if(!nor_ver.empty())
+   {
+      dvao->habilitarAtrib(ind_atrib_normales, false);
+   }
+   if(!nor_tri.empty())
+   {
+      dvao->habilitarAtrib(ind_atrib_normales, false);
+   }
+   if(!cc_tt_ver.empty())
+   {
+      dvao->habilitarAtrib(ind_atrib_coord_text, false);
+   }
 
+   dvao->draw(GL_TRIANGLES);
+
+   if(!col_ver.empty())
+   {
+      dvao->habilitarAtrib(ind_atrib_colores, true);
+   }
+   if(!nor_ver.empty())
+   {
+      dvao->habilitarAtrib(ind_atrib_normales, true);
+   }
+   if(!nor_tri.empty())
+   {
+      dvao->habilitarAtrib(ind_atrib_normales, true);
+   }
+   if(!cc_tt_ver.empty())
+   {
+      dvao->habilitarAtrib(ind_atrib_coord_text, true);
+   }
 }
 
 // -----------------------------------------------------------------------------
@@ -276,6 +342,70 @@ Cubo::Cubo()
          {1,5,7}, {1,7,3}  // Z+ (+1)
       } ;
 
+}
+
+CuboColores::CuboColores()
+:  MallaInd("cubo 8 vertices con colores")
+{
+   vertices =
+      {  { -1.0, -1.0, -1.0 }, // 0
+         { -1.0, -1.0, +1.0 }, // 1
+         { -1.0, +1.0, -1.0 }, // 2
+         { -1.0, +1.0, +1.0 }, // 3
+         { +1.0, -1.0, -1.0 }, // 4
+         { +1.0, -1.0, +1.0 }, // 5
+         { +1.0, +1.0, -1.0 }, // 6
+         { +1.0, +1.0, +1.0 }, // 7
+      } ;
+
+   triangulos =
+      {  {0,1,3}, {0,3,2}, // X-
+         {4,7,5}, {4,6,7}, // X+ (+4)
+
+         {0,5,1}, {0,4,5}, // Y-
+         {2,3,7}, {2,7,6}, // Y+ (+2)
+
+         {0,6,4}, {0,2,6}, // Z-
+         {1,5,7}, {1,7,3}  // Z+ (+1)
+      } ;
+
+   col_ver =
+      {
+         { 0.0, 0.0, 0.0 }, // 0
+         { 0.0, 0.0, 1.0 }, // 1
+         { 0.0, 1.0, 0.0 }, // 2
+         { 0.0, 1.0, 1.0 }, // 3
+         { 1.0, 0.0, 0.0 }, // 4
+         { 1.0, 0.0, 1.0 }, // 5
+         { 1.0, 1.0, 0.0 }, // 6
+         { 1.0, 1.0, 1.0 } // 7
+      };
+
+}
+
+Tetraedro::Tetraedro()
+:  MallaInd("tetraedro 4 vértices")
+{
+   vertices = 
+   {  { 0.0, 0.0, 1.0 }, // 0
+      { 1.0, 0.0, 0.0 }, // 1
+      { 0.0, 1.0, 0.0 }, // 2
+      { 0.0, 0.0, 0.0 }, // 3
+   } ;
+
+   triangulos = 
+   {  { 0, 1, 2 },
+      { 0, 2, 3 },
+      { 0, 3, 1 },
+      { 1, 3, 2 },
+   } ;
+}
+
+EstrellaZ::EstrellaZ(uint n)
+:  MallaInd("estrella Z")
+{
+   vertices.push_back({0.5, 0.5, 0.0});
+   col_ver.push_back({1.0, 1.0, 1.0});
 }
 
 // -----------------------------------------------------------------------------------------------

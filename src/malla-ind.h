@@ -123,6 +123,24 @@ class Cubo : public MallaInd
       Cubo();
 };
 
+class CuboColores : public MallaInd
+{
+   public:
+      CuboColores();
+};
+
+class Tetraedro: public MallaInd
+{
+   public:
+      Tetraedro();
+};
+
+class EstrellaZ: public MallaInd
+{
+   public:
+      EstrellaZ(uint n);
+};
+
 // ---------------------------------------------------------------------
 
 
