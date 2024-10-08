@@ -132,13 +132,37 @@ class CuboColores : public MallaInd
 class Tetraedro: public MallaInd
 {
    public:
-      Tetraedro();
+      Tetraedro(glm::vec3 color);
 };
 
 class EstrellaZ: public MallaInd
 {
    public:
       EstrellaZ(uint n);
+};
+
+class CasaX: public MallaInd
+{
+   public:
+      CasaX();
+};
+
+class MallaTriangulo : public MallaInd
+{
+   public:
+      MallaTriangulo();
+};
+
+class MallaCuadrado : public MallaInd
+{
+   public:
+      MallaCuadrado();
+};
+
+class MallaPiramide : public MallaInd
+{
+   public:
+      MallaPiramide();
 };
 
 // ---------------------------------------------------------------------

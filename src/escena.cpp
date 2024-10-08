@@ -317,9 +317,12 @@ Escena1::Escena1()
    // 
    // .......
    objetos.push_back( new Cubo() );
-   objetos.push_back( new Tetraedro() );
+   objetos.push_back( new Tetraedro({0,1,1}) );
    objetos.push_back( new CuboColores() );
    objetos.push_back( new EstrellaZ(7) );
+   objetos.push_back( new CasaX() );
+   objetos.push_back( new MallaPiramide() );
+
 
 
 }
