@@ -321,10 +321,6 @@ Escena1::Escena1()
    objetos.push_back( new CuboColores() );
    objetos.push_back( new EstrellaZ(7) );
    objetos.push_back( new CasaX() );
-   objetos.push_back( new MallaPiramide() );
-
-
-
 }
 
 // -------------------------------------------------------------------------
