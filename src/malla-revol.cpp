@@ -54,11 +54,25 @@ void MallaRevol::inicializar
    // perfil, según se describe en el guion de prácticas.
    //
    // ............................... 
+   for(int i=0; i < num_copias; i++)
+   {
+      float angulo = (glm::two_pi<float>() * i) / (num_copias - 1);
+      for(int j=0; j < perfil.size(); j++)
+      {
+         glm::vec3 q = {perfil[j][0] * cos(angulo), perfil[j][1], perfil[j][0] * sin(angulo)};
+         vertices.push_back(q);
+      }
+   }
 
-
-
-
-
+   for(int i=0; i < num_copias-1; i++)
+   {
+      for(int j=0; j < perfil.size()-1; j++) 
+      {
+         float k = i*perfil.size() + j;
+         triangulos.push_back({k, k+perfil.size(), k+perfil.size()+1});
+         triangulos.push_back({k, k+perfil.size()+1, k+1});
+      }
+   }
 }
 
 // -----------------------------------------------------------------------------
@@ -74,10 +88,69 @@ MallaRevolPLY::MallaRevolPLY
    // COMPLETAR: práctica 2: crear la malla de revolución
    // Leer los vértice del perfil desde un PLY, después llamar a 'inicializar'
    // ...........................
-
+   vector<glm::vec3> perfil;
+   LeerVerticesPLY(nombre_arch, perfil);
+   inicializar(perfil, nperfiles);
 
 }
 
+Cilindro::Cilindro
+(
+   const int num_verts_per,
+   const unsigned nperfiles
+)
+{
+   ponerNombre( std::string("Cilindro") );
+   vector<glm::vec3> perfil;
+   float altura = 1.0;
+   float incremento = altura/(num_verts_per -1);
+   perfil.push_back({1.0, 0.0, 0.0});
+
+   for(int i=1; i<num_verts_per; i++)
+   {
+      perfil.push_back({1.0, incremento*i, 0.0});
+   }
+
+   inicializar(perfil, nperfiles);
+}
+
+Cono::Cono
+(
+   const int num_verts_per,
+   const unsigned nperfiles
+)
+{
+   ponerNombre( std::string("Cono") );
+   vector<glm::vec3> perfil;
+   float altura = 1.0;
+   float incremento = altura/(num_verts_per -1);
+   perfil.push_back({1.0, 0.0, 0.0});
+
+   for(int i=1; i<num_verts_per; i++)
+   {
+      perfil.push_back({1.0 - incremento*i, incremento*i, 0.0});
+   }
+
+   inicializar(perfil, nperfiles);
+}
+
+Esfera::Esfera
+(
+   const int num_verts_per,
+   const unsigned nperfiles
+)
+{
+   ponerNombre( std::string("Esfera") );
+   vector<glm::vec3> perfil;
+   float radio = 1.0;
+   float incremento = radio/(num_verts_per - 1);
+   perfil.push_back({0.0, -radio, 0.0});
+
+   for(int i=1; i<=num_verts_per; i++)
+   {
+      perfil.push_back({radio*sin(glm::pi<float>()*i/num_verts_per), -radio*cos(glm::pi<float>()*i/num_verts_per), 0.0});
+   }
 
 
-
+   inicializar(perfil, nperfiles);
+}

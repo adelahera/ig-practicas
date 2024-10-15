@@ -57,8 +57,6 @@ class MallaRevol : public MallaInd
 } ;
 // --------------------------------------------------------------------- 
 
-
-
 class MallaRevolPLY : public MallaRevol
 {
    public:
@@ -66,6 +64,23 @@ class MallaRevolPLY : public MallaRevol
                   const unsigned nperfiles ) ;
 } ;
 
+class Cilindro : public MallaRevol
+{
+   public:
+   Cilindro( const int num_verts_per, const unsigned nperfiles ) ;
+} ;
+
+class Cono : public MallaRevol
+{
+   public:
+   Cono( const int num_verts_per, const unsigned nperfiles ) ;
+} ;
+
+class Esfera : public MallaRevol
+{
+   public:
+   Esfera( const int num_verts_per, const unsigned nperfiles ) ;
+} ;
 
 
 
