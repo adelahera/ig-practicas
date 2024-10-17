@@ -339,10 +339,11 @@ Escena2::Escena2()
    objetos.push_back( new Cilindro(2, 20) );
    objetos.push_back( new Cono(10, 20) );
    objetos.push_back( new Esfera(20, 20) );
+   objetos.push_back( new PiramideEstrellaZ(4) );
+   objetos.push_back( new RejillaY(10, 10) );
+   objetos.push_back( new MallaTorre(5) );
 
 }
-
-
 
 // -------------------------------------------------------------------------
 // COMPLETAR: práctica 3: completar constructor de 'Escena3'

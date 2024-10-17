@@ -544,5 +544,169 @@ MallaPiramide::MallaPiramide()
    };
 }
 
-// -----------------------------------------------------------------------------------------------
+PiramideEstrellaZ::PiramideEstrellaZ(uint n)
+:  MallaInd("Piramide estrella Z")
+{
+   float radio_grande = 0.5;
+   float radio_pequenio = radio_grande/2;
+   glm::vec3 centro = {0.5, 0.5, 0.0};
+   vertices.push_back(centro);
+   col_ver.push_back({1.0, 1.0, 1.0});
 
+   float angulo = 360.0/n;
+
+   for(uint i=0; i<n; i++)
+   {
+      float x_grande = centro[0] + radio_grande*cos(glm::radians(angulo*i));
+      float y_grande = centro[1] + radio_grande*sin(glm::radians(angulo*i));
+
+      vertices.push_back({x_grande, y_grande, 0.0});
+      col_ver.push_back({x_grande, y_grande, 0.0});
+
+      float x_pequenio = centro[0] + radio_pequenio*cos(glm::radians(angulo*i + angulo/2));
+      float y_pequenio = centro[1] + radio_pequenio*sin(glm::radians(angulo*i + angulo/2));
+
+      vertices.push_back({x_pequenio, y_pequenio, 0.0});
+      col_ver.push_back({x_pequenio, y_pequenio, 0.0});
+   }
+
+   uint aux1 = 1;
+   uint aux2 = 2;
+
+   vertices.push_back({0.5, 0.5, 0.5});
+   col_ver.push_back({1.0, 1.0, 1.0});
+
+   for(uint i=0; i<2*n; i++)
+   {
+      triangulos.push_back({0, aux1, aux2});
+      triangulos.push_back({vertices.size()-1, aux1, aux2});
+      
+      if(i%2 == 0)
+      {
+         aux1 += 2;
+      }
+      else
+      {
+         aux2 += 2;
+      }
+
+      if(aux1>=2*n)
+      {
+         aux1 = 1;
+      }
+   }
+
+   // OTRA OPCION
+
+   // float cordX_Central = 0.5;
+   // float cordY_Central = 0.5;
+   // float cordZ_Central = 0.5;
+   // float radio = 0.5;
+
+   // vertices.push_back({cordX_Central, cordY_Central, 0});
+   // col_ver.push_back({1, 1, 1});
+
+   // float x;
+   // float y;
+   // float x1;
+   // float y1;
+
+   // float angulo_ini = (360/n) * M_PI/180;
+   // float angulo_ini_abajo = angulo_ini/2;
+   // float angulo = 0;
+   // float angulo_abajo = angulo_ini_abajo;
+
+   // for(unsigned i = 0; i < n; i++){
+
+   //    x1 = cordX_Central + (radio/2) * cos(angulo_abajo);
+   //    y1 = cordY_Central + (radio/2) * sin(angulo_abajo);
+   //    vertices.push_back({x1, y1, 0});
+   //    col_ver.push_back({x1, y1, 0});
+   //    angulo_abajo += angulo_ini;
+
+   //    angulo += angulo_ini;
+   //    x = cordX_Central + radio * cos(angulo);
+   //    y = cordY_Central + radio * sin(angulo);
+   //    vertices.push_back({x, y, 0});
+   //    col_ver.push_back({x, y, 0});
+
+      
+   // }
+
+   // vertices.push_back({cordX_Central,cordY_Central,cordZ_Central});
+
+   // for (unsigned i = 1; i < 2*n; i++){
+
+   //    triangulos.push_back({0,i,i+1});
+   //    triangulos.push_back({0,i,2*n+1});
+
+   // }
+   
+   // triangulos.push_back({0,1,2*n});
+   // triangulos.push_back({0,2*n, 2*n+1});
+}
+
+RejillaY::RejillaY(uint n, uint m)
+:  MallaInd("Rejilla")
+{
+   float incr_x = 1.0/(n-1);
+   float incr_z = 1.0/(m-1);
+
+   for(int i=0; i<n; i++)
+   {
+      for(int j=0; j<m; j++)
+      {
+         vertices.push_back({i*incr_x, 0.0, j*incr_z});
+         col_ver.push_back({i*incr_x, 0.0, j*incr_z});
+      }
+   }
+
+   for(int i=0; i<n-1; i++)
+   {
+      for(int j=0; j<m-1; j++)
+      {
+         triangulos.push_back({i*m+j, i*m+j+1, (i+1)*m+j});
+         triangulos.push_back({i*m+j+1, (i+1)*m+j+1, (i+1)*m+j});
+      }
+   }
+}
+
+MallaTorre::MallaTorre(uint n)
+:  MallaInd("Torre")
+{
+   float x_coord = 0.5;
+   float z_coord = 0.5;
+
+   for(int i=0; i<n; i++)
+   {
+      vertices.push_back({x_coord, i*1, z_coord});
+      vertices.push_back({x_coord, i*1, -z_coord});
+      vertices.push_back({-x_coord, i*1, -z_coord});
+      vertices.push_back({-x_coord, i*1, z_coord});
+      
+
+      vertices.push_back({x_coord, (i*1)+1, z_coord});
+      vertices.push_back({x_coord, (i*1)+1, -z_coord});
+      vertices.push_back({-x_coord, (i*1)+1, -z_coord});
+      vertices.push_back({-x_coord, (i*1)+1, z_coord});
+   }
+
+   for (int i = 0; i < n; i++) {
+      for (int j = 0; j < 4; j++) {
+         glm::uvec3 t1, t2;
+         if (j == 3) {
+            t1 = {i * 8 + j, i * 8, i * 8 + 4 + j};
+            t2 = {i * 8, i * 8 + 4 + j, i * 8 + 4};
+         } else {
+            t1 = {i * 8 + j, i * 8 + j + 1, i * 8 + 4 + j};
+            t2 = {i * 8 + j + 1, i * 8 + 4 + j, i * 8 + 4 + j + 1};
+         }
+         triangulos.push_back(t1);
+         triangulos.push_back(t2);
+    }
+  }
+
+   
+}
+
+// -----------------------------------------------------------------------------------------------
