@@ -75,7 +75,7 @@ void FGE_PulsarLevantarTecla( GLFWwindow* window, int key, int scancode, int act
       // procesar la tecla en la variable 'key' para actualizar el estado de animación
       // del objeto actual ('objeto'), se debe usar 'ProcesarTeclaAnimacion': si devuelve
       // 'true', forzar revisualizar escena (asignando valor a 'revisualizar_escena')
-      
+      aplicacionIG->revisualizar_escena = ProcesarTeclaAnimacion( objeto, key ) ;
 
       return ; // finalizar la f.g.e, ya que si está la tecla A pulsada no se mira ninguna otra tecla.
    }
